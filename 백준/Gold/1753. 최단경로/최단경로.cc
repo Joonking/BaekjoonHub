@@ -1,59 +1,69 @@
 #include <iostream>
 #include <vector>
+#include <climits>
 #include <queue>
-#include <limits.h>
-using namespace std;
 
-typedef pair<int, int> edge;
-static int V, E, K;
-static vector<int> mdistance;
-static vector<bool> visited;
-static vector < vector <edge> > mlist;
-static priority_queue<edge, vector<edge>, greater<edge>> q;
+using namespace std;
 
 int main()
 {
     ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
+    //V : 정점의 개수, E : 간선의 개수, K : 시작 지점
+    int V, E, K;
     cin >> V >> E >> K;
 
-    mdistance.resize(V + 1);
-    std::fill(mdistance.begin(), mdistance.end(), INT_MAX);
-
-    visited.resize(V + 1);
-    std::fill(visited.begin(), visited.end(), false);
-    mlist.resize(V + 1);
-
-    for (int i = 0; i < E; i++) { // 가중치가 있는 인접 리스트 초기화
+    vector<vector<pair<int, int>>> DijkstraList(V + 1);
+    
+    for (int i = 0; i < E; i++)
+    {
         int u, v, w;
         cin >> u >> v >> w;
-        mlist[u].push_back(make_pair(v, w));
+        DijkstraList[u].push_back({ v,w });
     }
 
-    q.push(make_pair(0, K));
-    mdistance[K] = 0;
-    while (!q.empty()) {
-        edge current = q.top();
-        q.pop();
-        int c_v = current.second;
-        if (visited[c_v]) continue; // 기 방문 노드는 다시 큐에 넣지 않습니다.
-        visited[c_v] = true;
-        for (int i = 0; i < mlist[c_v].size(); i++) {
-            edge tmp = mlist[c_v][i];
-            int next = tmp.first;
-            int value = tmp.second;
-            if (mdistance[next] > mdistance[c_v] + value) { // 최소 거리로 업데이트
-                mdistance[next] = value + mdistance[c_v];
-                q.push(make_pair(mdistance[next], next));
+    vector<int> Ans(V + 1, INT_MAX);
+    Ans[K] = 0;
+
+    //pair - 거리, 노드
+    priority_queue < pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> PQ;
+    PQ.push({ 0, K });
+
+    while (PQ.empty() == false)
+    {
+        int NowDistance = PQ.top().first;
+        int NowNode = PQ.top().second;
+        PQ.pop();
+
+        if (NowDistance > Ans[NowNode])
+            continue;
+
+        for (const auto& a : DijkstraList[NowNode])
+        {
+            int NextNode = a.first;
+            int NextDistance = a.second;
+
+            if (Ans[NextNode] > Ans[NowNode] + NextDistance)
+            {
+                Ans[NextNode] = Ans[NowNode] + NextDistance;
+                PQ.push({ Ans[NextNode], NextNode });
             }
+            
         }
     }
-    for (int i = 1; i <= V; i++) { // 거리 배열 출력
-        if (visited[i])
-            cout << mdistance[i] << "\n";
-        else
-            cout << "INF" << "\n";
+
+    // 결과 출력
+    for (int i = 1; i <= V; i++) {
+        if (Ans[i] == INT_MAX) {
+            cout << "INF\n";
+        }
+        else {
+            cout << Ans[i] << "\n";
+        }
     }
+
+    
+    return 0;
 }
