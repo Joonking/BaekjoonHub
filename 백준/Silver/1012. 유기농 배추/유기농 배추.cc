@@ -17,7 +17,7 @@ void BFS(int y, int x, int YSize, int XSize)
     Queue.push({ y, x });
     Visited[y][x] = true;
 
-    while (!Queue.empty())  // while 조건 수정
+    while (Queue.empty() == false)  // while 조건 수정
     {
         pair<int, int> Front = Queue.front();
         Queue.pop();
@@ -27,11 +27,10 @@ void BFS(int y, int x, int YSize, int XSize)
             int NewY = Front.first + Dy[i];
             int NewX = Front.second + Dx[i];
 
-            // 범위 체크
             if (NewY < 0 || NewX < 0 || NewY >= YSize || NewX >= XSize)
                 continue;
 
-            if (Visited[NewY][NewX] == false && Bat[NewY][NewX] == 1)  // Bat[NewY][NewX] == 1 조건 추가
+            if (Visited[NewY][NewX] == false && Bat[NewY][NewX] == 1)  
             {
                 Visited[NewY][NewX] = true;
                 Queue.push({ NewY, NewX });
@@ -54,9 +53,9 @@ int main()
         int M, N, K;
         cin >> M >> N >> K;
 
-        // 배열 초기화 (범위를 초과하지 않도록 안전한 초기화)
-        fill(&Bat[0][0], &Bat[50][51], 0);
-        fill(&Visited[0][0], &Visited[50][51], false);
+        // 배열 초기화
+        fill(&Bat[0][0], &Bat[50][51], 0);  
+        fill(&Visited[0][0], &Visited[50][51], false); 
 
         for (int j = 0; j < K; j++)
         {
