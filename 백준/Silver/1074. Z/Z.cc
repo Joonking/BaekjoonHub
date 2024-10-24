@@ -1,45 +1,50 @@
 #include <iostream>
+#include <vector>
 #include <cmath>
+
 using namespace std;
+
+int N, r, c;
 
 int Count = 0;
 bool Find = false;
-int N, r, c;
 
-void Z(int y, int x, int size)
+void Z(int y, int x, int Size)
 {
-    if (Find) return;
+	if (Find) return;
 
-    if (y == r && x == c)
-    {
-        Find = true;
-        return;
-    }
+	if (y == r && x == c)
+	{
+		Find = true;
+		return;
+	}
 
-    if (y <= r && r < y + size && x <= c && c < x + size)
-    {
-        Z(y, x, size / 2);
-        Z(y, x + size/2, size / 2);
-        Z(y + size/2, x, size / 2);
-        Z(y + size/2, x +size/2, size / 2);
-    }
-    else
-    {
-        Count += size * size;
-    }
+	if (y <= r && r < y + Size && x <= c && c < x + Size)
+	{
+		int Half = Size / 2;
+
+		Z(y, x, Half);
+		Z(y, x + Half, Half);
+		Z(y + Half, x, Half);
+		Z(y + Half, x + Half, Half);
+	}
+	else
+	{
+		Count += Size * Size;
+	}
 }
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+	
+	cin >> N >> r >> c;
 
-    cin >> N >> r >> c;
+	Z(0, 0, pow(2,N));
 
-    Z(0, 0, pow(2,N));
-
-    cout << Count;
-
-    return 0;
+	cout << Count;
+	
+	return 0;
 }
