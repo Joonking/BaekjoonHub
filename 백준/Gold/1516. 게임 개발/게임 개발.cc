@@ -1,61 +1,67 @@
 #include <iostream>
+#include <string>
 #include <vector>
+#include <algorithm>
 #include <queue>
-
 using namespace std;
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int N;  //N : 건물의 종류
-    cin >> N;
+	int N;
+	cin >> N;
+	
+	vector<vector<int>> NeedList(N + 1);
+	vector<int> Degree(N + 1);
+	vector<int> BuildTime(N + 1);
+	vector<int> Ans(N + 1);
 
-    vector<vector<int>> A( N+1);      //인접리스트
-    vector<int> indegree(N + 1);       //진입 차수 배열
-    vector<int> selfBuild(N + 1);       //자신의 시간
+	for (int i = 1; i <= N; i++)
+	{
+		cin >> BuildTime[i];
+		Ans[i] = BuildTime[i];
+		while (true)
+		{
+			int Temp;
+			cin >> Temp;
+			if (Temp == -1) break;
+			NeedList[Temp].push_back(i);
+			Degree[i]++;
+		}
+	}
 
-    for(int i=1;i<=N;i++)
-    {
-        cin >> selfBuild[i];    //해당 건물을 짓기 위한 시간
-        while(true)
-        {
-            int preTemp;
-            cin >> preTemp;
-            if (preTemp == -1)
-                break;
-            A[preTemp].push_back(i);
-            indegree[i]++;      //진입 차수 데이터 저장
-        }
-    }
+	queue<int> Queue;
 
-    queue<int> queue;
-    for(int i=1; i<=N;i++)
-    {
-        if (indegree[i] == 0)
-            queue.push(i);
-    }
+	for (int i=1;i<=N;i++)
+	{
+		if (Degree[i] == 0)
+			Queue.push(i);
+	}
 
-    vector<int> result(N+1);
+	while (Queue.empty() == false)
+	{
+		int Front = Queue.front();
+		Queue.pop();
 
-    while(!queue.empty())
-    {
-        int now = queue.front();
-        queue.pop();
-        for(int next : A[now])
-        {
-            indegree[next]--;
-            result[next] = max(result[next], result[now] + selfBuild[now]);
-            if (indegree[next] == 0) {
-                queue.push(next);
-            }
-        }
-    }
+		for (int i : NeedList[Front])
+		{
+			if (Ans[i] < Ans[Front] + BuildTime[i])
+			{
+				Ans[i] = Ans[Front] + BuildTime[i];
+			}
 
-    for (int i = 1; i <= N; i++) {
-        cout << result[i] + selfBuild[i] << "\n";
-    }
+			Degree[i]--;
+			if (Degree[i] == 0)
+				Queue.push(i);
+		}
+	}
 
+	for (int i= 1;i<=N;i++)
+		cout << Ans[i] << "\n";
+
+
+	return 0;
 }
