@@ -1,86 +1,79 @@
 #include <iostream>
 #include <queue>
-#include <vector>
+
 using namespace std;
 
-// 밭
-int Bat[51][51] = { 0 };
-bool Visited[51][51] = { false };
+int Bat[50][50] = { 0 };
+bool Visited[50][50] = { false };
+int Dy[] = {-1, 1, 0, 0};
+int Dx[] = {0, 0, -1, 1};
 
-// 상하좌우
-int Dy[4] = { -1, 1, 0, 0 };
-int Dx[4] = { 0, 0, -1, 1 };
-
-void BFS(int y, int x, int YSize, int XSize)
+void BFS(int Y, int X, int YSize, int XSize)
 {
-    queue<pair<int, int>> Queue;
-    Queue.push({ y, x });
-    Visited[y][x] = true;
+	queue<pair<int,int>> Queue;
+	Queue.push({ Y, X });
+	Visited[Y][X] = true;
 
-    while (Queue.empty() == false)  // while 조건 수정
-    {
-        pair<int, int> Front = Queue.front();
-        Queue.pop();
+	while (Queue.empty() == false)
+	{
+		pair<int, int> Front = Queue.front();
+		Queue.pop();
 
-        for (int i = 0; i < 4; i++)
-        {
-            int NewY = Front.first + Dy[i];
-            int NewX = Front.second + Dx[i];
+		for (int i = 0; i < 4; i++)
+		{
+			int TempY = Front.first + Dy[i];
+			int TempX = Front.second + Dx[i];
 
-            if (NewY < 0 || NewX < 0 || NewY >= YSize || NewX >= XSize)
-                continue;
-
-            if (Visited[NewY][NewX] == false && Bat[NewY][NewX] == 1)  
-            {
-                Visited[NewY][NewX] = true;
-                Queue.push({ NewY, NewX });
-            }
-        }
-    }
+			if (TempY < 0 || TempX <0 || TempY >= YSize || TempX >= XSize)
+				continue;
+			
+			if (Bat[TempY][TempX] == 1 && Visited[TempY][TempX] == false)
+			{
+				Visited[TempY][TempX] = true;
+				Queue.push({ TempY, TempX });
+			}
+		}
+	}
 }
 
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int T;
-    cin >> T;
+	int T;
+	cin >> T;
 
-    for (int i = 0; i < T; i++)
-    {
-        int M, N, K;
-        cin >> M >> N >> K;
+	for (int i = 0; i < T; i++)
+	{
+		int M, N, K;
+		cin >> M >> N >> K;
 
-        // 배열 초기화
-        fill(&Bat[0][0], &Bat[50][51], 0);  
-        fill(&Visited[0][0], &Visited[50][51], false); 
+		fill(&Bat[0][0], &Bat[49][50], 0);
+		fill(&Visited[0][0], &Visited[49][50], false);
 
-        for (int j = 0; j < K; j++)
-        {
-            int X, Y;
-            cin >> X >> Y;
-            Bat[Y][X] = 1;
-        }
+		for (int p = 0; p < K; p++)
+		{
+			int TempX, TempY;
+			cin >> TempX >> TempY;
+			Bat[TempY][TempX] = 1;
+		}
+		int Count = 0;
+		for (int y = 0; y < N; y++)
+		{
+			for (int x = 0; x < M; x++)
+			{
+				if (Bat[y][x] == 1 && Visited[y][x] == false)
+				{
+					Count++;
+					BFS(y,x, N, M);
+				}
+			}
+		}
 
-        // 지렁이 수
-        int Count = 0;
+		cout << Count << "\n";
+	}
 
-        for (int y = 0; y < N; y++)
-        {
-            for (int x = 0; x < M; x++)
-            {
-                if (Bat[y][x] == 1 && Visited[y][x] == false)
-                {
-                    BFS(y, x, N, M);
-                    Count++;
-                }
-            }
-        }
-
-        cout << Count << "\n";
-    }
-
-    return 0;
+	return 0;
 }
