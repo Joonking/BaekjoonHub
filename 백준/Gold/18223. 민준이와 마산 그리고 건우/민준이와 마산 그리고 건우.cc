@@ -42,6 +42,7 @@ void CalcDijkstra(vector<int>& DijkstraList, int StartCity)
 		{
 			int NextDistance = a.first;
 			int NextCity = a.second;
+
 			if (DijkstraList[NextCity] > DijkstraList[NowCity] + NextDistance)
 			{
 				DijkstraList[NextCity] = DijkstraList[NowCity] + NextDistance;
@@ -76,21 +77,15 @@ int main()
 	CalcDijkstra(Dijkstra, 1);
 	CalcDijkstra(DijkstraFromGunWoo, P);
 
-	//건우 위치에서 정점까지 갈 수 있는 방법이 없으면
-	if(DijkstraFromGunWoo[V] == INT_MAX)
-		cout << "GOOD BYE" << "\n";
-	else
+	//1에서 P점 까지 간다음. P점에서 V까지 가는 경로가 
+	// 1에서 V점까지 가는 경로 보다 작으면 구출 가능
+	// 1 -> P -> V   <=    1 -> V
+	if (Dijkstra[P] + DijkstraFromGunWoo[V] <= Dijkstra[V])
 	{
-		//1에서 P점 까지 간다음. P점에서 V까지 가는 경로가 
-		// 1에서 V점까지 가는 경로 보다 작으면 구출 가능
-		// 1 -> P -> V   <=    1 -> V
-		if (Dijkstra[P] + DijkstraFromGunWoo[V] <= Dijkstra[V])
-		{
-			cout << "SAVE HIM" << "\n";
-		}
-		else
-			cout << "GOOD BYE" << "\n";
+		cout << "SAVE HIM" << "\n";
 	}
+	else
+		cout << "GOOD BYE" << "\n";
 
 	return 0;
 }
