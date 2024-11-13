@@ -22,38 +22,38 @@ int main()
         cin >> Nums[i];
     }
 
-    int StartIndex = 0, EndIndex = 0;
+    int StartIndex = 0;
+    int EndIndex = 0;
+
     int MaxLength = 0;
-    int ExceedCount = 0; // K를 초과한 값의 개수 체크
 
     while (EndIndex < N)
     {
-        // 새로운 값을 추가
-        int CurrentNum = Nums[EndIndex++];
-        CheckList[CurrentNum]++;
+        //추가할 숫자.
+        int AddNum = Nums[EndIndex];
 
-        // K를 초과하는 값이 생기면 ExceedCount 증가
-        if (CheckList[CurrentNum] > K)
+        //추가할 숫자가 K 개수 이하면
+        if (CheckList[AddNum] < K)
         {
-            ExceedCount++;
+            //개수 늘려주고
+            CheckList[Nums[EndIndex]]++;
+            //End 인덱스 하나 늘리고
+            EndIndex++;
         }
-
-        // ExceedCount가 0이 될 때까지 StartIndex를 이동
-        while (ExceedCount > 0)
+        //K 개수 이상이면
+        else
         {
-            int RemoveNum = Nums[StartIndex++];
-            CheckList[RemoveNum]--;
+            //윈도우 크기 제일 큰거 담기
+            MaxLength = max(MaxLength, EndIndex - StartIndex);
 
-            // StartIndex가 하나 이동해서 K 이하가 되면 ExceedCount 감소
-            if (CheckList[RemoveNum] == K)
-            {
-                ExceedCount--;
-            }
+            //뺄 숫자 담고 StartIndex 하나 증가
+            int SubNum = Nums[StartIndex++];
+            CheckList[SubNum]--;
         }
-
-        // 현재 윈도우 크기 계산
-        MaxLength = max(MaxLength, EndIndex - StartIndex);
     }
+
+    //윈도우 크기 제일 큰거 담기
+    MaxLength = max(MaxLength, EndIndex - StartIndex);
 
     cout << MaxLength;
 
