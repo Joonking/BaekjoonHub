@@ -39,21 +39,18 @@ int main()
             CheckList[Nums[EndIndex]]++;
             //End 인덱스 하나 늘리고
             EndIndex++;
+
+            //윈도우 크기 제일 큰거 담기
+            MaxLength = max(MaxLength, EndIndex - StartIndex);
         }
         //K 개수 이상이면
         else
         {
-            //윈도우 크기 제일 큰거 담기
-            MaxLength = max(MaxLength, EndIndex - StartIndex);
-
             //뺄 숫자 담고 StartIndex 하나 증가
             int SubNum = Nums[StartIndex++];
             CheckList[SubNum]--;
         }
     }
-
-    //윈도우 크기 제일 큰거 담기
-    MaxLength = max(MaxLength, EndIndex - StartIndex);
 
     cout << MaxLength;
 
