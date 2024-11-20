@@ -1,36 +1,39 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
-int main(void)
+int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-    int N, W, Count = 0;
-    vector<string> v;
+	int N, M;
+	cin >> N >> M;
 
-    cin >> N >> W;
-    int tmp = W;
+	int Weight = 0;
+	int Count = 0;
 
-    while (N--)
-    {
-        int book;
-        cin >> book;
+	for (int i = 0; i < N; i++)
+	{
+		int TempWeight;
+		cin >> TempWeight;
 
-        if (tmp - book < 0)
-        {
-            Count++;
-            tmp = W;
-        }
+		if (Weight + TempWeight <= M)
+		{
+			Weight += TempWeight;
+			if (Count == 0)
+				Count++;
+		}
+		else
+		{
+			Weight = TempWeight;
+			Count++;
+		}
+	}
 
-        tmp -= book;
-    }
-    if (tmp == W)
-        cout << Count;
-    else
-        cout << Count + 1;
+	cout << Count;
+
+	return 0;
 }
