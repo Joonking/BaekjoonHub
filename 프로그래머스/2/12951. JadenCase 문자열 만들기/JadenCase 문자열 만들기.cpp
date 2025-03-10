@@ -1,7 +1,5 @@
 #include <string>
 #include <vector>
-#include <sstream>
-#include <algorithm>
 
 using namespace std;
 
@@ -20,7 +18,6 @@ string solution(string s) {
         
         if(IsFirst)
         {
-            
             answer += toupper(c);
         }
         else
