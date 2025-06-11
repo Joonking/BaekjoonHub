@@ -1,26 +1,16 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
-int main()
+int main() 
 {
-	int A, B, C, result;
-	cin >> A >> B >> C;
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
 
-	int Max = A;
-	if(A>=B &&A>=C)
-	{
-		if (B > C)result = B;
-		else result = C;
-	}
-	else if (B >= A && B >= C)
-	{
-		if (A > C)result = A;
-		else result = C;
-	}
-	else
-	{
-		if (A > B)result = A;
-		else result = B;
-	}
-	cout << result;
+	int a[3];
+	cin >> a[0] >> a[1] >> a[2];
+
+	sort(a, a + 3);
+	cout << a[1];
 }
