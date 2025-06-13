@@ -11,24 +11,55 @@ int board[500][500];
 int dy[4] = { -1, 1, 0, 0 };
 int dx[4] = { 0, 0, -1, 1 };
 
-int dfs(int y, int x)
+int bfs(int y, int x)
 {
 	int area = 1;
 	board[y][x] = 0;
 
-	for (int dir = 0; dir < 4; dir++)
-	{
-		int ny = y + dy[dir];
-		int nx = x + dx[dir];
+	queue<pair<int, int>> MyQueue;
+	MyQueue.push({ y, x });
 
-		if (ny < 0 || ny >= n || nx < 0 || nx >= m)
-			continue;
-		if (board[ny][nx] == 0)
-			continue;
-		area += dfs(ny, nx);
+	while (MyQueue.empty() == false)
+	{
+		auto [cy, cx] = MyQueue.front();
+		MyQueue.pop();
+
+		for (int dir = 0; dir < 4; dir++)
+		{
+			int ny = cy + dy[dir];
+			int nx = cx + dx[dir];
+
+			if (ny < 0 || ny >= n || nx < 0 || nx >= m)
+				continue;
+			if (board[ny][nx] == 0)
+				continue;
+
+			MyQueue.push({ ny,nx });
+			board[ny][nx] = 0;
+			area++;
+		}
 	}
 	return area;
 }
+
+//int dfs(int y, int x)
+//{
+//	int area = 1;
+//	board[y][x] = 0;
+//
+//	for (int dir = 0; dir < 4; dir++)
+//	{
+//		int ny = y + dy[dir];
+//		int nx = x + dx[dir];
+//
+//		if (ny < 0 || ny >= n || nx < 0 || nx >= m)
+//			continue;
+//		if (board[ny][nx] == 0)
+//			continue;
+//		area += dfs(ny, nx);
+//	}
+//	return area;
+//}
 
 int main()
 {
@@ -53,7 +84,7 @@ int main()
 		{
 			if (board[y][x] == 1)
 			{
-				areas.push_back(dfs(y, x));
+				areas.push_back(bfs(y, x));
 			}
 		}
 	}
@@ -69,6 +100,6 @@ int main()
 		cout << areas.size() << "\n";
 		cout << areas.back() << "\n";  // back() 쓰면 더 깔끔!
 	}
-	
+
 	return 0;
 }
