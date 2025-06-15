@@ -77,7 +77,7 @@ int main()
             Answer += TEdge.Weight;
         }
 
-        if (EdgeCount == E - 1)
+        if (EdgeCount == V-1)
             break;
     }
 
