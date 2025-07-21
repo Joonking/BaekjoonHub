@@ -1,5 +1,7 @@
 #include <iostream>
+#include <string>
 #include <vector>
+#include <algorithm>
 #include <map>
 using namespace std;
 
@@ -9,23 +11,21 @@ int main()
 	cin.tie(nullptr);
 	cout.tie(nullptr);
 
-	map<string, string, greater<>> NameMap;
-
 	int N;
 	cin >> N;
+	map<string, string, greater<string>> StrMap;
 
 	for (int i = 0; i < N; i++)
 	{
-		string Name, EnterOrLeave;
-		cin >> Name >> EnterOrLeave;
-
-		NameMap[Name] = EnterOrLeave;
+		string Temp1, Temp2;
+		cin >> Temp1 >> Temp2;
+		StrMap[Temp1] = Temp2;
 	}
 
-	for (auto i : NameMap)
+	for (auto a : StrMap)
 	{
-		if (i.second == "enter")
-			cout << i.first << "\n";
+		if (a.second == "enter")
+			cout << a.first << "\n";
 	}
 
 	return 0;
