@@ -1,6 +1,5 @@
 #include <iostream>
 #include <map>
-#include <set>
 using namespace std;
 
 int main()
@@ -21,22 +20,21 @@ int main()
 		UMap[BookName]++;
 	}
 
-	int MaxCount = -1;
-	set<string> Set;
+	int MaxCount = 0;
+	string BestSeller;
 
 	for (auto a : UMap)
 	{
 		if (a.second > MaxCount)
 		{
 			MaxCount = a.second;
-			Set.clear();
-			Set.insert(a.first);
+			BestSeller = a.first;
 		}
-		else if (a.second == MaxCount)
-			Set.insert(a.first);
+		else if (a.second == MaxCount && a.first < BestSeller)
+			BestSeller = a.first;
 	}
 
-	cout << *Set.begin();
+	cout << BestSeller;
 
 	return 0;
 }
