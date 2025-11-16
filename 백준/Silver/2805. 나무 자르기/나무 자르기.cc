@@ -4,35 +4,58 @@
 
 using namespace std;
 
-int n, m;
-vector<int> tree;
-
-int main() {
-    cin >> n >> m;
-
-    for (auto i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        tree.push_back(x);
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    
+    int N;
+    long long M;
+    cin >> N >> M;
+    
+    vector<int> trees(N);
+    for (int i = 0; i < N; i++)
+    {
+        cin >> trees[i];
     }
-
-    int start = 0;
-    int end = *max_element(tree.begin(), tree.end());
-    int result = 0;
-
-    while (start <= end) {
-        long long int total = 0;
-        int mid = (start + end) / 2;
-        for (auto i = 0; i < n; i++) {
-            if (tree[i] > mid) total += tree[i] - mid;
+    
+    sort(trees.begin(), trees.end());
+    
+    int leftCut = 0;
+    int rightCut = trees[N - 1];
+    
+    int answer = 0;  // 답 저장 변수 추가
+    
+    while (leftCut <=rightCut)
+    {
+        int mid = (leftCut + rightCut) / 2;
+        long long sum = 0;
+        for (int i : trees)
+        {
+            if (i-mid >0) sum += i-mid;
         }
-        if (total < m) {
-            end = mid - 1;
+ 
+        //나무들이 200, 300, 400 이런데 mid 값이 만약 1이야
+        // 근데 M은 30이야. 30이면 충분해.
+        //그러면 199 + 299 + 399 = sum >= 30 말도 안되게 낭비임.
+        // 즉 문제는 나무를 최소로 잘라 최대의 값이 필요한거임. 
+        // 그래서 답을 저장해 놓고 계속 left를 올려서 최적의 값을 찾는거임.
+        if (sum >= M)
+        {
+            answer = mid;
+            leftCut = mid + 1;
         }
-        else {
-            result = mid;
-            start = mid + 1;
+        // sum < M 인 경우는 sum = 10 < M = 30 이런경우니까
+        // 자르는 높이(mid)가 너무 높게 설정된거.
+        // right를 조정해서 mid 값이 더 낮아질 수 있도록.
+        else
+        {
+            rightCut = mid - 1;
         }
     }
-    cout << result;
+    
+    cout << answer << endl;
+    
+    return 0;
 }
